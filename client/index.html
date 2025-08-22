@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Analytics Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: "#00FF88",
+            dark: "#0a0f0d",
+            panel: "#111827"
+          },
+          fontFamily: {
+            sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @import url('https://rsms.me/inter/inter.css');
+    body {
+      background: radial-gradient(circle at top left, #0f172a, #000);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans text-gray-200">
+  
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-10 space-y-10">
+    
+    <!-- Filter Form -->
+    <section class="bg-panel/80 backdrop-blur-xl border border-neon/30 p-6 rounded-2xl shadow-lg hover:shadow-neon/40 transition">
+      <h2 class="text-xl font-semibold text-neon mb-5 tracking-wide">Filter Events</h2>
+      <form id="filter-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <input type="text" id="user_id" placeholder="User ID"
+          class="p-3 bg-dark border border-neon/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-neon text-neon placeholder-gray-500 transition" />
+        <input type="text" id="event_type" placeholder="Event Type"
+          class="p-3 bg-dark border border-neon/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-neon text-neon placeholder-gray-500 transition" />
+        <input type="datetime-local" id="start_time"
+          class="p-3 bg-dark border border-neon/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-neon text-neon placeholder-gray-500 transition" />
+        <input type="datetime-local" id="end_time"
+          class="p-3 bg-dark border border-neon/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-neon text-neon placeholder-gray-500 transition" />
+      </form>
+      <button type="button" onclick="fetchFilteredEvents()"
+        class="px-6 py-3 bg-neon/20 border border-neon text-neon font-semibold rounded-lg hover:bg-neon hover:text-black focus:outline-none focus:ring-2 focus:ring-neon transition transform hover:scale-105">
+        Apply Filter
+      </button>
+    </section>
+
+    <!-- Analytics Table -->
+    <section class="bg-panel/80 backdrop-blur-xl border border-neon/30 p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-semibold text-neon mb-5 tracking-wide">User Event Counts</h2>
+      <div id="loading" class="flex justify-center items-center py-6 hidden">
+        <div class="animate-spin w-6 h-6 border-4 border-neon border-t-transparent rounded-full"></div>
+        <span class="ml-3 text-gray-400">Loading...</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-dark text-neon uppercase text-sm tracking-wider">
+            <tr>
+              <th class="p-4 font-medium">User ID</th>
+              <th class="p-4 font-medium">Event Count</th>
+            </tr>
+          </thead>
+          <tbody id="analytics-body" class="divide-y divide-gray-700 text-gray-200">
+            <!-- Rows dynamically inserted -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Filtered Events Table -->
+    <section class="bg-panel/80 backdrop-blur-xl border border-neon/30 p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-semibold text-neon mb-5 tracking-wide">Filtered Events</h2>
+      <div id="filter-loading" class="flex justify-center items-center py-6 hidden">
+        <div class="animate-spin w-6 h-6 border-4 border-neon border-t-transparent rounded-full"></div>
+        <span class="ml-3 text-gray-400">Fetching events...</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-dark text-neon uppercase text-sm tracking-wider">
+            <tr>
+              <th class="p-4 font-medium">User ID</th>
+              <th class="p-4 font-medium">Event Type</th>
+              <th class="p-4 font-medium">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="events-body" class="divide-y divide-gray-700 text-gray-200">
+            <!-- Rows dynamically inserted -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- JS -->
+  <script src="script.js"></script>
+</body>
+</html>
